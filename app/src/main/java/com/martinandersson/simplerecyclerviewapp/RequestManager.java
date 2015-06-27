@@ -12,7 +12,7 @@ import com.android.volley.toolbox.Volley;
 /**
  * Manager class for the volley request queue
  */
-public class RequestManager {
+public final class RequestManager {
     private static final String TAG = RequestManager.class.getSimpleName();
     public static final int REQUEST_TIMEOUT = 20; // Seconds
     public static final int MAX_NUMBER_OF_RETRIES = 1;

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lint>
+    <issue id="RtlHardcoded" severity="ignore" />
+
+    <!-- We don't need drawable-xxxhdpi folder since we are using mipmap for icons -->
+    <issue id="IconMissingDensityFolder" severity="ignore" />
+
+    <!-- Invalid package reference in library; not included in Android: java.nio.file. Referenced from okio.Okio. -->
+    <issue id="InvalidPackage" severity="ignore" />
+
+</lint>

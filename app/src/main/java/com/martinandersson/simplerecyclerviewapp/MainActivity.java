@@ -1,7 +1,7 @@
 package com.martinandersson.simplerecyclerviewapp;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -24,7 +24,7 @@ import com.martinandersson.simplerecyclerviewapp.model.ArtistsResponse;
 
 import java.util.ArrayList;
 
-public class MainActivity extends Activity {
+public class MainActivity extends AppCompatActivity {
 
     public static final String BASE_URL = "https://itunes.apple.com/search/?term=";
     public static final String DEFAULT_SEARCH_TERM = "rock";
@@ -34,7 +34,7 @@ public class MainActivity extends Activity {
     private EditText mEditText;
     private Button mButton;
     private LinearLayoutManager mLayoutManager;
-    private ArtistsAdapter mAdapter;
+    private SongsAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +61,7 @@ public class MainActivity extends Activity {
         mRecyclerView.setHasFixedSize(false);
         mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mAdapter = new ArtistsAdapter(this, new ArrayList<Artist>());
+        mAdapter = new SongsAdapter(this, new ArrayList<Artist>());
         mRecyclerView.setAdapter(mAdapter);
 
         mEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {

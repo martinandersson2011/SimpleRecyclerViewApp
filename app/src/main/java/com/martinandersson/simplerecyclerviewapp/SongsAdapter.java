@@ -11,15 +11,14 @@ import android.widget.TextView;
 import com.martinandersson.simplerecyclerviewapp.model.Artist;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by martin on 6/26/15.
  */
-public class ArtistsAdapter extends RecyclerView.Adapter<ArtistsAdapter.ViewHolder> {
+public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> {
 
-    public static final String TAG = ArtistsAdapter.class.getSimpleName();
+    public static final String TAG = SongsAdapter.class.getSimpleName();
 
     private Context mContext;
     private List<Artist> mArtists;
@@ -38,7 +37,7 @@ public class ArtistsAdapter extends RecyclerView.Adapter<ArtistsAdapter.ViewHold
 
     }
 
-    public ArtistsAdapter(Context context, List<Artist> artists) {
+    public SongsAdapter(Context context, List<Artist> artists) {
         mContext = context;
         mArtists = artists;
     }
@@ -48,7 +47,6 @@ public class ArtistsAdapter extends RecyclerView.Adapter<ArtistsAdapter.ViewHold
         notifyDataSetChanged();
     }
 
-
     @Override
     public long getItemId(int position) {
         return 0;
@@ -56,8 +54,8 @@ public class ArtistsAdapter extends RecyclerView.Adapter<ArtistsAdapter.ViewHold
 
     // Create new views (invoked by the layout manager)
     @Override
-    public ArtistsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_artist, parent, false);
+    public SongsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_song, parent, false);
         ViewHolder vh = new ViewHolder(v);
         return vh;
     }

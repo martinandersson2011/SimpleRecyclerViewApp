@@ -2,5 +2,6 @@
     <string name="app_name">SimpleRecyclerViewApp</string>
     <string name="enter_search_text">Enter search text</string>
     <string name="search">Search</string>
+    <string name="cd_thumbnail">Thumbnail</string>
 
 </resources>

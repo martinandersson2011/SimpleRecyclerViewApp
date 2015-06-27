@@ -1,4 +1,7 @@
 apply plugin: 'com.android.application'
+apply plugin: 'findbugs'
+apply plugin: 'pmd'
+apply plugin: 'checkstyle'
 
 android {
     compileSdkVersion 22
@@ -21,6 +24,15 @@ android {
         exclude 'META-INF/LICENSE'
         exclude 'META-INF/NOTICE'
     }
+
+    lintOptions {
+        abortOnError true
+        warningsAsErrors true
+        checkReleaseBuilds true
+        lintConfig file('lint.xml')
+        htmlReport true
+    }
+
 }
 
 
@@ -41,6 +53,62 @@ dependencies {
     compile 'com.fasterxml.jackson.core:jackson-databind:2.6.0-rc2'
 
     compile 'com.jakewharton:butterknife:6.1.0'
+}
 
 
+// Add checkstyle, findbugs, pmd and lint to the check task.
+check.dependsOn 'checkstyle', 'findbugs', 'pmd', 'lint'
+
+//  Usage:
+//      ./gradlew app:findbugs
+//      open app/build/reports/findbugs/findbugs.html
+task findbugs(type: FindBugs) {
+    excludeFilter file("${project.rootDir}/config/findbugs/exclude.xml")
+    classes = fileTree('build/intermediates/classes/debug/')
+    // Varies based on your app build configs and flavors...
+    source = fileTree('src/main/java/')
+    classpath = files()
+    effort = 'max'
+    reports {
+        xml.enabled = false
+        html.enabled = true
+    }
+}
+
+//  Usage:
+//      ./gradlew app:pmd
+//      open app/build/reports/pmd/pmd.html
+task pmd(type: Pmd) {
+    ruleSetFiles = files("${project.rootDir}/config/pmd/pmd-ruleset.xml")
+    ignoreFailures = false
+    ruleSets = []
+
+    source 'src'
+    include '**/*.java'
+    exclude '**/gen/**'
+    exclude '**/*Tests.java'
+    exclude '**/*TestCase.java'
+
+    reports {
+        xml.enabled = false
+        html.enabled = true
+        xml {
+            destination "$project.buildDir/reports/pmd/pmd.xml"
+        }
+        html {
+            destination "$project.buildDir/reports/pmd/pmd.html"
+        }
+    }
+}
+
+//  Usage:
+//      ./gradlew app:checkstyle
+//      open app/build/reports/checkstyle/checkstyle.xml
+task checkstyle(type: Checkstyle) {
+    configFile file("${project.rootDir}/config/checkstyle/checkstyle.xml")
+    configProperties.checkstyleSuppressionsPath = file("${project.rootDir}/config/checkstyle/suppressions.xml").absolutePath
+    source 'src'
+    include '**/*.java'
+    exclude '**/gen/**'
+    classpath = files()
 }
