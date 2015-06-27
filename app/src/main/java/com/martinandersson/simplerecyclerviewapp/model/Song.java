@@ -5,21 +5,21 @@ import org.json.JSONObject;
 /**
  * Created by martin on 6/26/15.
  */
-public class Artist {
+public class Song {
 
     private String artistUrl;
     private String artistName;
     private String songName;
 
-    public static Artist fromJSON(JSONObject json) {
+    public static Song fromJSON(JSONObject json) {
         String artistUrl = json.optString("artworkUrl100", null);
         String artistName = json.optString("artistName", null);
         String songName = json.optString("trackName", null);
 
-        return new Artist(artistUrl, artistName, songName);
+        return new Song(artistUrl, artistName, songName);
     }
 
-    public Artist(String artistUrl, String artistName, String songName) {
+    public Song(String artistUrl, String artistName, String songName) {
         super();
         this.artistUrl = artistUrl;
         this.artistName = artistName;

@@ -6,11 +6,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,10 +16,15 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.martinandersson.simplerecyclerviewapp.model.Artist;
-import com.martinandersson.simplerecyclerviewapp.model.ArtistsResponse;
+import com.martinandersson.simplerecyclerviewapp.model.Song;
+import com.martinandersson.simplerecyclerviewapp.model.SongsResponse;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -30,41 +32,34 @@ public class MainActivity extends AppCompatActivity {
     public static final String DEFAULT_SEARCH_TERM = "rock";
 
     public static final String TAG = MainActivity.class.getSimpleName();
-    private RecyclerView mRecyclerView;
-    private EditText mEditText;
-    private Button mButton;
+
+    @InjectView(R.id.search_text)
+    EditText mSearchText;
+    @InjectView(R.id.recyclerview)
+    RecyclerView mRecyclerView;
+
     private LinearLayoutManager mLayoutManager;
     private SongsAdapter mAdapter;
+    private List<Song> mSongs = new ArrayList<Song>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.inject(this);
 
         RequestManager.init(this);
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerview);
-        mEditText = (EditText) findViewById(R.id.search_text);
-        mButton = (Button) findViewById(R.id.search_button);
-
-        mButton.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                handleSearch();
-            }
-        });
-
-        mEditText.setText(DEFAULT_SEARCH_TERM);
-        mEditText.setSelection(mEditText.getText().length());
+        mSearchText.setText(DEFAULT_SEARCH_TERM);
+        mSearchText.setSelection(mSearchText.getText().length());
 
         mRecyclerView.setHasFixedSize(false);
         mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mAdapter = new SongsAdapter(this, new ArrayList<Artist>());
+        mAdapter = new SongsAdapter(this, mSongs);
         mRecyclerView.setAdapter(mAdapter);
 
-        mEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        mSearchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEND) {
                     handleSearch();
@@ -76,13 +71,14 @@ public class MainActivity extends AppCompatActivity {
         loadData(DEFAULT_SEARCH_TERM);
     }
 
-    private void handleSearch() {
-        String searchTerm = mEditText.getText().toString();
+    @OnClick(R.id.search_button)
+    public void handleSearch() {
+        String searchTerm = mSearchText.getText().toString();
         loadData(searchTerm);
 
         // Hide keyboard
         InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(mEditText.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(mSearchText.getWindowToken(), 0);
     }
 
     private void loadData(String searchTerm) {
@@ -93,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 Log.d(TAG, "onResponse");
-                handleSongsResponse(new ArtistsResponse(response));
+                handleSongsResponse(new SongsResponse(response));
             }
         }, new Response.ErrorListener() {
             @Override
@@ -109,9 +105,9 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void handleSongsResponse(ArtistsResponse response) {
+    private void handleSongsResponse(SongsResponse response) {
         Log.d(TAG, "handleSongsResponse");
-        mAdapter.updateData(response.getArtists());
+        mAdapter.updateData(response.getSongs());
 
     }
 

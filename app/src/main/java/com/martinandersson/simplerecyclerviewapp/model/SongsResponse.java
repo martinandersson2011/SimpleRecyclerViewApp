@@ -12,23 +12,23 @@ import android.util.Log;
 /**
  * Created by martin on 6/26/15.
  */
-public class ArtistsResponse {
-    public static final String TAG = ArtistsResponse.class.getSimpleName();
+public class SongsResponse {
+    public static final String TAG = SongsResponse.class.getSimpleName();
 
     public static final String KEY_RESULTS = "results";
 
-    private List<Artist> mArtists;
+    private List<Song> mSongs;
 
-    public ArtistsResponse(String jsonString) {
+    public SongsResponse(String jsonString) {
         Log.i(TAG, jsonString);
 
-        mArtists = new ArrayList<Artist>();
+        mSongs = new ArrayList<Song>();
 
         try {
             JSONArray response = new JSONObject(jsonString).getJSONArray(KEY_RESULTS);
 
             for (int i = 0; i < response.length(); i++) {
-                mArtists.add(Artist.fromJSON(response.getJSONObject(i)));
+                mSongs.add(Song.fromJSON(response.getJSONObject(i)));
             }
 
         } catch (JSONException e) {
@@ -37,12 +37,12 @@ public class ArtistsResponse {
 
     }
 
-    public List<Artist> getArtists() {
-        return mArtists;
+    public List<Song> getSongs() {
+        return mSongs;
     }
 
-    public void setArtists(List<Artist> artists) {
-        this.mArtists = artists;
+    public void setSongs(List<Song> songs) {
+        this.mSongs = songs;
     }
 
 }

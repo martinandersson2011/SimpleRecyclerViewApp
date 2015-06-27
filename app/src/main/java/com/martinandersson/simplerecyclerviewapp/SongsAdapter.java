@@ -8,10 +8,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.martinandersson.simplerecyclerviewapp.model.Artist;
+import com.martinandersson.simplerecyclerviewapp.model.Song;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 
 /**
  * Created by martin on 6/26/15.
@@ -21,29 +24,15 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> 
     public static final String TAG = SongsAdapter.class.getSimpleName();
 
     private Context mContext;
-    private List<Artist> mArtists;
+    private List<Song> mSongs;
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView image;
-        TextView artist;
-        TextView song;
-
-        public ViewHolder(View v) {
-            super(v);
-            image = (ImageView) v.findViewById(R.id.row_image);
-            artist = (TextView) v.findViewById(R.id.row_artist);
-            song = (TextView) v.findViewById(R.id.row_song);
-        }
-
-    }
-
-    public SongsAdapter(Context context, List<Artist> artists) {
+    public SongsAdapter(Context context, List<Song> songs) {
         mContext = context;
-        mArtists = artists;
+        mSongs = songs;
     }
 
-    public void updateData(List<Artist> artists) {
-        mArtists = artists;
+    public void updateData(List<Song> songs) {
+        mSongs = songs;
         notifyDataSetChanged();
     }
 
@@ -54,7 +43,7 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> 
 
     // Create new views (invoked by the layout manager)
     @Override
-    public SongsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_song, parent, false);
         ViewHolder vh = new ViewHolder(v);
         return vh;
@@ -64,17 +53,31 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
 
-        Artist artist = mArtists.get(position);
-        holder.artist.setText(artist.getArtistName());
-        holder.song.setText(artist.getSongName());
-        Picasso.with(mContext).load(artist.getArtistUrl()).into(holder.image);
+        Song song = mSongs.get(position);
+        holder.rowArtist.setText(song.getArtistName());
+        holder.rowSong.setText(song.getSongName());
+        Picasso.with(mContext).load(song.getArtistUrl()).into(holder.rowImage);
 
     }
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return mArtists.size();
+        return mSongs.size();
+    }
+
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        @InjectView(R.id.row_image)
+        ImageView rowImage;
+        @InjectView(R.id.row_artist)
+        TextView rowArtist;
+        @InjectView(R.id.row_song)
+        TextView rowSong;
+
+        public ViewHolder(View v) {
+            super(v);
+            ButterKnife.inject(this, v);
+        }
     }
 
 }
