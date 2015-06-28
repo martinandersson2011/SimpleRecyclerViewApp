@@ -6,9 +6,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,6 +18,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.martinandersson.simplerecyclerviewapp.model.JSONModel;
 import com.martinandersson.simplerecyclerviewapp.model.Song;
 import com.martinandersson.simplerecyclerviewapp.model.SongsResponse;
 
@@ -32,26 +35,39 @@ public class MainActivity extends AppCompatActivity {
     public static final String DEFAULT_SEARCH_TERM = "rock";
 
     public static final String TAG = MainActivity.class.getSimpleName();
+    public static final String KEY_SONGS_RESPONSE = "KEY_SONGS_RESPONSE";
 
     @InjectView(R.id.search_text)
     EditText mSearchText;
     @InjectView(R.id.recyclerview)
     RecyclerView mRecyclerView;
+    @InjectView(R.id.no_results)
+    TextView mNoResults;
+    @InjectView(R.id.progress_bar)
+    ProgressBar mProgressBar;
 
     private LinearLayoutManager mLayoutManager;
     private SongsAdapter mAdapter;
     private List<Song> mSongs = new ArrayList<Song>();
+    private SongsResponse mSongsResponse;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
-
         RequestManager.init(this);
 
         mSearchText.setText(DEFAULT_SEARCH_TERM);
         mSearchText.setSelection(mSearchText.getText().length());
+
+        // Check if we have data to display (after rotation)
+        if (savedInstanceState != null) {
+            mSongsResponse = (SongsResponse) savedInstanceState.getSerializable(KEY_SONGS_RESPONSE);
+            mSongs = mSongsResponse.getSongs();
+        } else {
+            handleSearch();
+        }
 
         mRecyclerView.setHasFixedSize(false);
         mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
@@ -68,46 +84,48 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
-        loadData(DEFAULT_SEARCH_TERM);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable(KEY_SONGS_RESPONSE, mSongsResponse);
     }
 
     @OnClick(R.id.search_button)
     public void handleSearch() {
-        String searchTerm = mSearchText.getText().toString();
-        loadData(searchTerm);
+        mProgressBar.setVisibility(View.VISIBLE);
+        mNoResults.setVisibility(View.GONE);
 
         // Hide keyboard
         InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(mSearchText.getWindowToken(), 0);
-    }
 
-    private void loadData(String searchTerm) {
-
+        String searchTerm = mSearchText.getText().toString();
         String url = BASE_URL + searchTerm;
         StringRequest req = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
-                Log.d(TAG, "onResponse");
-                handleSongsResponse(new SongsResponse(response));
+                mSongsResponse = JSONModel.fromObject(response, SongsResponse.class);
+                mSongs = mSongsResponse.getSongs();
+                mAdapter.updateData(mSongs);
+                mProgressBar.setVisibility(View.GONE);
+                mNoResults.setVisibility(View.GONE);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.w(TAG, "onErrorResponse");
                 Toast.makeText(MainActivity.this, "No results found", Toast.LENGTH_SHORT).show();
+                mProgressBar.setVisibility(View.GONE);
+                mNoResults.setVisibility(View.VISIBLE);
                 // handleError();
             }
         });
         // Enable caching and add the request to the RequestQueue.
         req.setShouldCache(true);
         RequestManager.addToRequestQueue(req, TAG);
-
-    }
-
-    private void handleSongsResponse(SongsResponse response) {
-        Log.d(TAG, "handleSongsResponse");
-        mAdapter.updateData(response.getSongs());
 
     }
 

@@ -1,29 +1,30 @@
 package com.martinandersson.simplerecyclerviewapp.model;
 
-import org.json.JSONObject;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.io.Serializable;
 
 /**
  * Created by martin on 6/26/15.
  */
-public class Song {
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class Song extends JSONModel implements Serializable {
 
+    public static final String PROPERTY_ARTWORK_URL_100 = "artworkUrl100";
+    public static final String PROPERTY_ARTIST_NAME = "artistName";
+    public static final String PROPERTY_TRACK_NAME = "trackName";
+
+    @JsonProperty(PROPERTY_ARTWORK_URL_100)
     private String artistUrl;
+
+    @JsonProperty(PROPERTY_ARTIST_NAME)
     private String artistName;
+
+    @JsonProperty(PROPERTY_TRACK_NAME)
     private String songName;
 
-    public static Song fromJSON(JSONObject json) {
-        String artistUrl = json.optString("artworkUrl100", null);
-        String artistName = json.optString("artistName", null);
-        String songName = json.optString("trackName", null);
-
-        return new Song(artistUrl, artistName, songName);
-    }
-
-    public Song(String artistUrl, String artistName, String songName) {
-        super();
-        this.artistUrl = artistUrl;
-        this.artistName = artistName;
-        this.songName = songName;
+    public Song() {
     }
 
     public String getArtistUrl() {

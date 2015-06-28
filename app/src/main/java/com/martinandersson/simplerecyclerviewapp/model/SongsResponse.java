@@ -1,48 +1,32 @@
 package com.martinandersson.simplerecyclerviewapp.model;
 
-import java.util.ArrayList;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.io.Serializable;
 import java.util.List;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import android.util.Log;
 
 /**
  * Created by martin on 6/26/15.
  */
-public class SongsResponse {
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class SongsResponse extends JSONModel implements Serializable {
     public static final String TAG = SongsResponse.class.getSimpleName();
 
-    public static final String KEY_RESULTS = "results";
+    public static final String PROPERTY_RESULTS = "results";
 
-    private List<Song> mSongs;
+    @JsonProperty(PROPERTY_RESULTS)
+    private List<Song> songs;
 
-    public SongsResponse(String jsonString) {
-        Log.i(TAG, jsonString);
-
-        mSongs = new ArrayList<Song>();
-
-        try {
-            JSONArray response = new JSONObject(jsonString).getJSONArray(KEY_RESULTS);
-
-            for (int i = 0; i < response.length(); i++) {
-                mSongs.add(Song.fromJSON(response.getJSONObject(i)));
-            }
-
-        } catch (JSONException e) {
-            Log.e(TAG, "JSONException " + e.toString());
-        }
-
+    public SongsResponse() {
     }
 
     public List<Song> getSongs() {
-        return mSongs;
+        return songs;
     }
 
     public void setSongs(List<Song> songs) {
-        this.mSongs = songs;
+        this.songs = songs;
     }
 
 }
