@@ -25,8 +25,8 @@ import com.martinandersson.simplerecyclerviewapp.model.SongsResponse;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity {
@@ -37,13 +37,13 @@ public class MainActivity extends AppCompatActivity {
     public static final String TAG = MainActivity.class.getSimpleName();
     public static final String KEY_SONGS_RESPONSE = "KEY_SONGS_RESPONSE";
 
-    @InjectView(R.id.search_text)
+    @Bind(R.id.search_text)
     EditText mSearchText;
-    @InjectView(R.id.recyclerview)
+    @Bind(R.id.recyclerview)
     RecyclerView mRecyclerView;
-    @InjectView(R.id.no_results)
+    @Bind(R.id.no_results)
     TextView mNoResults;
-    @InjectView(R.id.progress_bar)
+    @Bind(R.id.progress_bar)
     ProgressBar mProgressBar;
 
     private LinearLayoutManager mLayoutManager;
@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         RequestManager.init(this);
 
         mSearchText.setText(DEFAULT_SEARCH_TERM);

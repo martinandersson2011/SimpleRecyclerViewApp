@@ -13,8 +13,8 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * Created by martin on 6/26/15.
@@ -67,16 +67,16 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> 
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        @InjectView(R.id.row_image)
+        @Bind(R.id.row_image)
         ImageView rowImage;
-        @InjectView(R.id.row_artist)
+        @Bind(R.id.row_artist)
         TextView rowArtist;
-        @InjectView(R.id.row_song)
+        @Bind(R.id.row_song)
         TextView rowSong;
 
         public ViewHolder(View v) {
             super(v);
-            ButterKnife.inject(this, v);
+            ButterKnife.bind(this, v);
         }
     }
 
