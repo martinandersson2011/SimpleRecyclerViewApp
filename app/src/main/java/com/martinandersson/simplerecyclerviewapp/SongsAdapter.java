@@ -6,7 +6,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.martinandersson.simplerecyclerviewapp.model.Song;
 import com.squareup.picasso.Picasso;
@@ -53,10 +55,17 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
 
-        Song song = mSongs.get(position);
+        final Song song = mSongs.get(position);
         holder.rowArtist.setText(song.getArtistName());
         holder.rowSong.setText(song.getSongName());
         Picasso.with(mContext).load(song.getArtistUrl()).into(holder.rowImage);
+
+        holder.rowLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(mContext, "Clicked on " + song.getSongName(), Toast.LENGTH_SHORT).show();
+            }
+        });
 
     }
 
@@ -67,10 +76,15 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> 
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
+        @Bind(R.id.row_layout)
+        RelativeLayout rowLayout;
+
         @Bind(R.id.row_image)
         ImageView rowImage;
+
         @Bind(R.id.row_artist)
         TextView rowArtist;
+
         @Bind(R.id.row_song)
         TextView rowSong;
 
