@@ -1,6 +1,7 @@
 package com.martinandersson.simplerecyclerviewapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -64,6 +65,9 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> 
             @Override
             public void onClick(View v) {
                 Toast.makeText(mContext, "Clicked on " + song.getSongName(), Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(mContext, DetailActivity.class);
+                intent.putExtra(DetailActivity.ARG_SONG, song);
+                mContext.startActivity(intent);
             }
         });
 

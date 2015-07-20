@@ -4,5 +4,9 @@
     <string name="search">Search</string>
     <string name="no_results">No results found</string>
     <string name="cd_thumbnail">Thumbnail</string>
+    <string name="title_activity_detail">DetailActivity</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
 
 </resources>
