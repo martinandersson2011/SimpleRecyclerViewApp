@@ -6,8 +6,8 @@ import android.support.v7.app.ActionBarActivity;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.martinandersson.simplerecyclerviewapp.model.Song;
-import com.squareup.picasso.Picasso;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -36,7 +36,7 @@ public class DetailActivity extends ActionBarActivity {
 
         mArtist.setText(song.getArtistName());
         mSong.setText(song.getSongName());
-        Picasso.with(this).load(song.getArtistUrl()).into(mImage);
+        Glide.with(this).load(song.getArtistUrl()).into(mImage);
     }
 
 }

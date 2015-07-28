@@ -11,8 +11,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.martinandersson.simplerecyclerviewapp.model.Song;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -59,7 +59,7 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> 
         final Song song = mSongs.get(position);
         holder.rowArtist.setText(song.getArtistName());
         holder.rowSong.setText(song.getSongName());
-        Picasso.with(mContext).load(song.getArtistUrl()).into(holder.rowImage);
+        Glide.with(mContext).load(song.getArtistUrl()).into(holder.rowImage);
 
         holder.rowLayout.setOnClickListener(new View.OnClickListener() {
             @Override
