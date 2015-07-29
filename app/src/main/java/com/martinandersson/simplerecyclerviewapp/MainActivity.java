@@ -136,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
                 mSongs = mSongsResponse.getSongs();
                 mAdapter.updateData(mSongs);
                 mProgressBar.setVisibility(View.GONE);
-                mNoResults.setVisibility(View.GONE);
+                mNoResults.setVisibility(mSongs != null && mSongs.size() > 0 ? View.GONE : View.VISIBLE);
             }
         }, new Response.ErrorListener() {
             @Override
