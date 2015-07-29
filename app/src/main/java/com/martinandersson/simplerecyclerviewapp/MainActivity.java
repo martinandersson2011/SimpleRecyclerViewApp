@@ -1,5 +1,6 @@
 package com.martinandersson.simplerecyclerviewapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,6 +19,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.martinandersson.simplerecyclerviewapp.events.ShowDetailEvent;
 import com.martinandersson.simplerecyclerviewapp.model.JSONModel;
 import com.martinandersson.simplerecyclerviewapp.model.Song;
 import com.martinandersson.simplerecyclerviewapp.model.SongsResponse;
@@ -28,6 +30,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import de.greenrobot.event.EventBus;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -84,6 +87,17 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
+
+        EventBus.getDefault().register(this);
+    }
+
+    public void onEvent(ShowDetailEvent event) {
+        Song song = event.getSong();
+        Log.d(TAG, "onEvent - ShowDetailEvent: " + song.getSongName());
+
+        Intent intent = new Intent(this, DetailActivity.class);
+        intent.putExtra(DetailActivity.ARG_SONG, song);
+        startActivity(intent);
     }
 
     @Override

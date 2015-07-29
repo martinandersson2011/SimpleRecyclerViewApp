@@ -12,12 +12,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.martinandersson.simplerecyclerviewapp.events.ShowDetailEvent;
 import com.martinandersson.simplerecyclerviewapp.model.Song;
 
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import de.greenrobot.event.EventBus;
 
 /**
  * Created by martin on 6/26/15.
@@ -64,10 +66,7 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> 
         holder.rowLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(mContext, "Clicked on " + song.getSongName(), Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(mContext, DetailActivity.class);
-                intent.putExtra(DetailActivity.ARG_SONG, song);
-                mContext.startActivity(intent);
+                EventBus.getDefault().post(new ShowDetailEvent(song));
             }
         });
 
