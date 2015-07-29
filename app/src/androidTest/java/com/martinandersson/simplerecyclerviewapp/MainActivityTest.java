@@ -20,6 +20,15 @@ import static org.hamcrest.Matchers.not;
 
 /**
  * Created by martin.andersson on 7/29/15.
+ * --- Getting started ---
+ * https://code.google.com/p/android-test-kit/wiki/Espresso
+ * https://code.google.com/p/android-test-kit/wiki/EspressoV2CheatSheet
+ * --- ActivityRule by Jake Wharton ---
+ * https://gist.github.com/JakeWharton/1c2f2cadab2ddd97f9fb
+ * --- Video tutorial ---
+ * https://www.youtube.com/watch?v=TGU0B4qRlHY
+ * --- Solving problem with Espresso and Dagger ---
+ * http://www.donnfelker.com/android-studio-espresso-2-0-classnotfoundexception/
  */
 @RunWith(AndroidJUnit4.class)
 public class MainActivityTest {
@@ -29,6 +38,7 @@ public class MainActivityTest {
 
     @Test
     public void shouldBeAbleToLaunchMainScreen() {
+        // Check that we have a button with the text Search
         onView(withText("Search")).check(matches(isDisplayed()));
     }
 
