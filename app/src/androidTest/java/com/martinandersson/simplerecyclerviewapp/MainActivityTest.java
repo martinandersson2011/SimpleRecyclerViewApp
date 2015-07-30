@@ -1,6 +1,7 @@
 package com.martinandersson.simplerecyclerviewapp;
 
 import android.support.test.espresso.assertion.ViewAssertions;
+import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -9,8 +10,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.clearText;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -36,16 +39,9 @@ public class MainActivityTest {
     public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule(MainActivity.class);
 
     @Test
-    public void shouldBeAbleToLaunchMainScreen() {
-        // Check that we have a button with the text Search
-        onView(withText("Search")).check(matches(isDisplayed()));
-    }
-
-    @Test
     public void searchForPop() {
-        // Clear text and enter pop
-        onView(withId(R.id.search_text)).perform(clearText());
-        onView(withId(R.id.search_text)).perform(typeText("pop"));
+        // Change search text
+        onView(withId(R.id.search_text)).perform(replaceText("pop"));
 
         // Click on search button
         onView(withId(R.id.search_button)).perform(click());
@@ -59,9 +55,8 @@ public class MainActivityTest {
 
     @Test
     public void searchForNonExistingSongs() {
-        // Clear text and enter garbage text
-        onView(withId(R.id.search_text)).perform(clearText());
-        onView(withId(R.id.search_text)).perform(typeText("somethingthatdoesnotexistabcdef"));
+        // Change search text
+        onView(withId(R.id.search_text)).perform(replaceText("somethingthatdoesnotexistabcdef"));
 
         // Click on search button
         onView(withId(R.id.search_button)).perform(click());
@@ -72,5 +67,34 @@ public class MainActivityTest {
         // Check that progress bar is not displayed when done
         onView(withId(R.id.progress_bar)).check(matches(not(isDisplayed())));
     }
+
+    @Test
+    public void searchForJazzAndTestRecyclerView() {
+        // Change search text
+        onView(withId(R.id.search_text)).perform(replaceText("jazz"));
+
+        // Click on search button
+        onView(withId(R.id.search_button)).perform(click());
+
+        // Scroll recycler view to the bottom
+        onView(withId(R.id.recyclerview)).perform(RecyclerViewActions.scrollToPosition(49));
+
+        // Scroll recycler view to the top
+        onView(withId(R.id.recyclerview)).perform(RecyclerViewActions.scrollToPosition(0));
+
+        // Click on the first item to start the detail view
+        onView(withId(R.id.recyclerview)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+
+        // Check that the artist view on the DetailActivity is visible
+        onView(withId(R.id.artist)).check(matches(isDisplayed()));
+
+        // Go back to MainActivity
+        pressBack();
+
+        // Check that search button is displayed
+        onView(withId(R.id.search_button)).check(matches(isDisplayed()));
+    }
+
+
 
 }
