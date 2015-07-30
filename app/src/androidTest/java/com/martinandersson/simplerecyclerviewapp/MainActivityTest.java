@@ -1,6 +1,7 @@
 package com.martinandersson.simplerecyclerviewapp;
 
 import android.support.test.espresso.assertion.ViewAssertions;
+import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.junit.Rule;
@@ -23,8 +24,6 @@ import static org.hamcrest.Matchers.not;
  * --- Getting started ---
  * https://code.google.com/p/android-test-kit/wiki/Espresso
  * https://code.google.com/p/android-test-kit/wiki/EspressoV2CheatSheet
- * --- ActivityRule by Jake Wharton ---
- * https://gist.github.com/JakeWharton/1c2f2cadab2ddd97f9fb
  * --- Video tutorial ---
  * https://www.youtube.com/watch?v=TGU0B4qRlHY
  * --- Solving problem with Espresso and Dagger ---
@@ -34,7 +33,7 @@ import static org.hamcrest.Matchers.not;
 public class MainActivityTest {
 
     @Rule
-    public final ActivityRule<MainActivity> main = new ActivityRule<>(MainActivity.class);
+    public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule(MainActivity.class);
 
     @Test
     public void shouldBeAbleToLaunchMainScreen() {
