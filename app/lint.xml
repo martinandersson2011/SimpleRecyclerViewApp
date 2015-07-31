@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <lint>
     <issue id="RtlHardcoded" severity="ignore" />
+    <issue id="GradleDependency" severity="ignore" /> <!-- Can't update to latest appcompat before Espresso supports it?-->
 
     <!-- We don't need drawable-xxxhdpi folder since we are using mipmap for icons -->
     <issue id="IconMissingDensityFolder" severity="ignore" />

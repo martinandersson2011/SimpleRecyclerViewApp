@@ -15,12 +15,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
+import com.martinandersson.simplerecyclerviewapp.api.RestClient;
 import com.martinandersson.simplerecyclerviewapp.events.ShowDetailEvent;
-import com.martinandersson.simplerecyclerviewapp.model.JSONModel;
 import com.martinandersson.simplerecyclerviewapp.model.Song;
 import com.martinandersson.simplerecyclerviewapp.model.SongsResponse;
 
@@ -31,10 +27,11 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.greenrobot.event.EventBus;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 public class MainActivity extends AppCompatActivity {
-
-    public static final String BASE_URL = "https://itunes.apple.com/search/?term=";
     public static final String DEFAULT_SEARCH_TERM = "rock";
 
     public static final String TAG = MainActivity.class.getSimpleName();
@@ -59,7 +56,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        RequestManager.init(this);
 
         mSearchText.setText(DEFAULT_SEARCH_TERM);
         mSearchText.setSelection(mSearchText.getText().length());
@@ -127,30 +123,24 @@ public class MainActivity extends AppCompatActivity {
         imm.hideSoftInputFromWindow(mSearchText.getWindowToken(), 0);
 
         String searchTerm = mSearchText.getText().toString();
-        String url = BASE_URL + searchTerm;
-        StringRequest req = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
-
+        RestClient.getSearchApi().getItunesSearchResults(searchTerm, new Callback<SongsResponse>() {
             @Override
-            public void onResponse(String response) {
-                mSongsResponse = JSONModel.fromObject(response, SongsResponse.class);
+            public void success(SongsResponse songsResponse, Response response) {
+                Log.d(TAG, response.getBody().toString());
+                mSongsResponse = songsResponse;
                 mSongs = mSongsResponse.getSongs();
                 mAdapter.updateData(mSongs);
                 mProgressBar.setVisibility(View.GONE);
                 mNoResults.setVisibility(mSongs != null && mSongs.size() > 0 ? View.GONE : View.VISIBLE);
             }
-        }, new Response.ErrorListener() {
+
             @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.w(TAG, "onErrorResponse");
+            public void failure(RetrofitError error) {
                 Toast.makeText(MainActivity.this, "No results found", Toast.LENGTH_SHORT).show();
                 mProgressBar.setVisibility(View.GONE);
                 mNoResults.setVisibility(View.VISIBLE);
-                // handleError();
             }
         });
-        // Enable caching and add the request to the RequestQueue.
-        req.setShouldCache(true);
-        RequestManager.addToRequestQueue(req, TAG);
 
     }
 

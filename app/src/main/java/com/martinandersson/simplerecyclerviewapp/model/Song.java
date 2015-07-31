@@ -1,27 +1,25 @@
 package com.martinandersson.simplerecyclerviewapp.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
 /**
  * Created by martin on 6/26/15.
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class Song extends JSONModel implements Serializable {
+public class Song implements Serializable {
 
     public static final String PROPERTY_ARTWORK_URL_100 = "artworkUrl100";
     public static final String PROPERTY_ARTIST_NAME = "artistName";
     public static final String PROPERTY_TRACK_NAME = "trackName";
 
-    @JsonProperty(PROPERTY_ARTWORK_URL_100)
+    @SerializedName(PROPERTY_ARTWORK_URL_100)
     private String artistUrl;
 
-    @JsonProperty(PROPERTY_ARTIST_NAME)
+    @SerializedName(PROPERTY_ARTIST_NAME)
     private String artistName;
 
-    @JsonProperty(PROPERTY_TRACK_NAME)
+    @SerializedName(PROPERTY_TRACK_NAME)
     private String songName;
 
     public Song() {
