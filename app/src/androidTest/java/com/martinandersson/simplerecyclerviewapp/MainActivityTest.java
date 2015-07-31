@@ -1,6 +1,5 @@
 package com.martinandersson.simplerecyclerviewapp;
 
-import android.support.test.espresso.assertion.ViewAssertions;
 import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -11,14 +10,11 @@ import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.pressBack;
-import static android.support.test.espresso.action.ViewActions.clearText;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.replaceText;
-import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.not;
 
 
@@ -27,10 +23,13 @@ import static org.hamcrest.Matchers.not;
  * --- Getting started ---
  * https://code.google.com/p/android-test-kit/wiki/Espresso
  * https://code.google.com/p/android-test-kit/wiki/EspressoV2CheatSheet
+ * http://developer.android.com/reference/android/support/test/espresso/contrib/RecyclerViewActions.html
  * --- Video tutorial ---
  * https://www.youtube.com/watch?v=TGU0B4qRlHY
  * --- Solving problem with Espresso and Dagger ---
  * http://www.donnfelker.com/android-studio-espresso-2-0-classnotfoundexception/
+ * --- Espresso Tutorial including RecyclerView ---
+ * https://androidresearch.wordpress.com/2015/04/04/an-introduction-to-espresso/
  */
 @RunWith(AndroidJUnit4.class)
 public class MainActivityTest {
@@ -39,7 +38,7 @@ public class MainActivityTest {
     public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule(MainActivity.class);
 
     @Test
-    public void searchForPop() {
+    public void testSearchForPop() {
         // Change search text
         onView(withId(R.id.search_text)).perform(replaceText("pop"));
 
@@ -54,7 +53,7 @@ public class MainActivityTest {
     }
 
     @Test
-    public void searchForNonExistingSongs() {
+    public void testSearchForNonExistingSongs() {
         // Change search text
         onView(withId(R.id.search_text)).perform(replaceText("somethingthatdoesnotexistabcdef"));
 
@@ -69,7 +68,7 @@ public class MainActivityTest {
     }
 
     @Test
-    public void searchForJazzAndTestRecyclerView() {
+    public void testSearchForJazzAndUseRecyclerView() {
         // Change search text
         onView(withId(R.id.search_text)).perform(replaceText("jazz"));
 
@@ -94,7 +93,5 @@ public class MainActivityTest {
         // Check that search button is displayed
         onView(withId(R.id.search_button)).check(matches(isDisplayed()));
     }
-
-
 
 }

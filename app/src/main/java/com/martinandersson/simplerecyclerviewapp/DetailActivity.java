@@ -32,11 +32,16 @@ public class DetailActivity extends ActionBarActivity {
         ButterKnife.bind(this);
 
         Intent intent = getIntent();
-        Song song = (Song) intent.getSerializableExtra(ARG_SONG);
 
-        mArtist.setText(song.getArtistName());
-        mSong.setText(song.getSongName());
-        Glide.with(this).load(song.getArtistUrl()).into(mImage);
+        if (intent != null) {
+            Song song = (Song) intent.getSerializableExtra(ARG_SONG);
+
+            if (song != null) {
+                mArtist.setText(song.getArtistName());
+                mSong.setText(song.getSongName());
+                Glide.with(this).load(song.getArtistUrl()).into(mImage);
+            }
+        }
     }
 
 }
